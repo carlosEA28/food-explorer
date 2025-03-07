@@ -9,6 +9,7 @@ import { env } from "../src/env";
 import fastifyCors from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
+import { createAccount } from "./routes/createAccount";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -32,6 +33,8 @@ app.register(fastifySwagger, {
 app.register(fastifySwaggerUi, {
   routePrefix: "/docs",
 });
+
+app.register(createAccount);
 
 app.listen({ port: env.PORT }).then(() => {
   console.log("HTTP Server is running");
