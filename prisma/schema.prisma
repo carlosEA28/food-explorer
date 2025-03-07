@@ -13,9 +13,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
+  userId    String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      Role       @default(USER)
+  favorites Favorite[]
+}
+
+model Food {
+  foodId      String     @id @default(uuid())
+  name        String
+  category    String
+  imgUrl      String
+  description String
+  price       Float
+  ingredients String[]
+  favoritedBy Favorite[]
+}
+
+model Favorite {
+  user   User   @relation(fields: [userId], references: [userId])
+  userId String
+
+  food   Food   @relation(fields: [foodId], references: [foodId])
+  foodId String
+
+  @@id([userId, foodId]) // Chave primária composta para evitar duplicatas
 }
